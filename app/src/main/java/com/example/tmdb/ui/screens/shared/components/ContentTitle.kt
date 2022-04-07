@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.tmdb.R
 
-
 @Composable
 fun ContentTitle(
     modifier: Modifier = Modifier,

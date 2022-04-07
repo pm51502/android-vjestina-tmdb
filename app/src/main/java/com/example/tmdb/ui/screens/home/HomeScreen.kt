@@ -27,11 +27,6 @@ fun HomeScreen(navController: NavHostController) {
         )
     }
 
-    /*val onFavoriteClick = { updatedMovie: MovieItemViewState ->
-        val index = allMovies.indexOfFirst { it.id == updatedMovie.id }
-        allMovies = allMovies.toMutableList().apply { set(index, updatedMovie) }
-    }*/
-
     val onFavoriteClick = { movieId: Int ->
         val movie = allMovies.first { it.id == movieId }
         val index = allMovies.indexOf(movie)

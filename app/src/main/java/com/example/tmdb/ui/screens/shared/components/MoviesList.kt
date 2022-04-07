@@ -35,7 +35,6 @@ fun MoviesList(
     }
 }
 
-
 @Preview
 @Composable
 fun MoviesListPreview() {
