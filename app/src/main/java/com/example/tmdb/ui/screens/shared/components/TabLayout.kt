@@ -20,9 +20,6 @@ fun TabLayout(
     tabItems: Map<String, List<MovieItemViewState>>,
     onMovieItemClick: (movieId: Int) -> Unit,
     onFavoriteClick: (movieId: Int) -> Unit
-
-    //tabItems: List<String>,
-    //content: @Composable () -> Unit
 ) {
     var tabIndex by remember { mutableStateOf(0) }
     val movieTitles = tabItems.keys.toList()
@@ -150,4 +147,3 @@ fun TabLayoutPreview(){
         onFavoriteClick = {}
     )
 }
-

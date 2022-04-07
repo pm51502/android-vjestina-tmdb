@@ -61,7 +61,6 @@ fun MovieCard(
     }
 }
 
-
 @Preview
 @Composable
 fun MovieCardPreview() {
