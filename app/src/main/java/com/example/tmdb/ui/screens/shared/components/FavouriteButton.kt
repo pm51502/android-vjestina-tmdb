@@ -1,0 +1,50 @@
+package com.example.tmdb.ui.screens.shared.components
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.tmdb.R
+
+@Composable
+fun FavouriteButton(
+    modifier: Modifier = Modifier,
+    movieId: Int,
+    isFavorite: Boolean,
+    onFavoriteClick: (movieId: Int) -> Unit
+) {
+    Image(
+        painter = painterResource(id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),
+        contentDescription = null,
+        modifier = modifier
+            .clickable {
+                //val updatedMovie = movie.copy(isFavorite = isFavorite.not())
+                onFavoriteClick.invoke(movieId)
+            }
+            .size(dimensionResource(id = R.dimen.large_spacing))
+            .background(
+                color = colorResource(id = R.color.dark_blue_60),
+                CircleShape
+            )
+            .padding(dimensionResource(id = R.dimen.small_spacing))
+    )
+}
+
+
+@Preview
+@Composable
+fun FavouriteButtonPreview() {
+    FavouriteButton(
+        isFavorite = true,
+        onFavoriteClick = {},
+        movieId = 1
+    )
+}
