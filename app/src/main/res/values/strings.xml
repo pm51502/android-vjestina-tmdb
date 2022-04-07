@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Tmdb</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="details">Details</string>
+    <string name="app_logo">App logo</string>
+    <string name="back_button">Back button</string>
+    <string name="bottom_navigation_icon">Bottom navigation icon</string>
+    <string name="bottom_navigation_icon_selected">Bottom navigation icon selected</string>
+    <string name="search_icon">Search icon</string>
+    <string name="search">Search</string>
+
+    <string name="whats_popular">What\'s popular</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="now_playing">Now playing</string>
+    <string name="upcoming">Upcoming</string>
+
+    <string name="overview">Overview</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
+    <string name="user_score">User Score</string>
+
+    <string name="cast_card_image">Cast card image</string>
+    <string name="details_image">Details screen image</string>
 </resources>
