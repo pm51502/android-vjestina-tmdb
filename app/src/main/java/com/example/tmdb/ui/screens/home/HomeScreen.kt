@@ -4,16 +4,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.tmdb.ui.navigation.Screen
+import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.TabLayout
 import com.example.tmdb.ui.screens.shared.components.SearchView
 import com.example.tmdb.utils.MovieLoader
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavController) {
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     var allMovies by remember {
@@ -23,7 +23,7 @@ fun HomeScreen(navController: NavHostController) {
     val onMovieItemClick = { movieId: Int ->
         navigateToScreen(
             navController = navController,
-            route = "${Screen.Details.route}/$movieId"
+            route = "${RootScreen.Details.route}/$movieId"
         )
     }
 

@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Tmdb</string>
+
+    <string name="main">Main</string>
+    <string name="details">Details</string>
+
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
-    <string name="details">Details</string>
+    <!--<string name="details">Details</string>-->
+
     <string name="app_logo">App logo</string>
     <string name="back_button">Back button</string>
     <string name="bottom_navigation_icon">Bottom navigation icon</string>
