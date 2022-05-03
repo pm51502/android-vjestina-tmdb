@@ -1,62 +1,37 @@
 package com.example.tmdb.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.tmdb.R
-import com.example.tmdb.ui.navigation.Screen
-import com.example.tmdb.ui.navigation.SetupNavHost
-import com.example.tmdb.ui.navigation.navigateToScreen
+import com.example.tmdb.ui.navigation.*
+import com.example.tmdb.ui.screens.shared.components.TopBar
 
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-
+fun MainScreen(
+    rootNavController: NavController,
+    bottomBarNavController: NavController
+) {
     val items = listOf(
-        Screen.Home,
-        Screen.Favorites,
+        BottomBarScreen.Home,
+        BottomBarScreen.Favorites,
     )
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val navBackStackEntry by bottomBarNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = stringResource(id = R.string.app_logo),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(35.dp, 0.dp, 110.dp, 7.dp)
-                    )
-                },
-                navigationIcon = {
-                    val currentRoute = currentDestination?.route
-
-                    if (currentRoute != null && currentRoute.startsWith(Screen.Details.route)) {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_arrow_back),
-                                contentDescription = stringResource(
-                                    id = R.string.back_button
-                                )
-                            )
-                        }
-                    }
-                },
+            TopBar(
+                currentRoute = currentDestination?.route,
+                rootNavController = rootNavController
             )
         },
 
@@ -74,27 +49,33 @@ fun MainScreen() {
                         label = { Text(text = stringResource(screen.resourceId)) },
                         selected = selected,
                         onClick = {
-                            navigateToScreen(navController = navController, route = screen.route)
+                            navigateToScreen(
+                                navController = bottomBarNavController,
+                                route = screen.route
+                            )
                         }
                     )
                 }
             }
         }
-    ) { innerPadding ->
-        SetupNavHost(navController = navController, innerPadding = innerPadding)
+    ) {
+        BottomBarNavHost(
+            rootNavController = rootNavController,
+            bottomBarNavController = bottomBarNavController
+        )
     }
 }
 
 @Composable
-fun BottomNavigationIcon(screen: Screen, isSelected: Boolean) {
+fun BottomNavigationIcon(screen: BottomBarScreen, isSelected: Boolean) {
     val painter =
-        if (screen.route == Screen.Home.route)
+        if (screen.route == BottomBarScreen.Home.route)
             painterResource(id = R.drawable.ic_home_outline)
         else
             painterResource(id = R.drawable.ic_fav_outline)
 
     val selectedPainter =
-        if (screen.route == Screen.Home.route)
+        if (screen.route == BottomBarScreen.Home.route)
             painterResource(id = R.drawable.ic_home)
         else
             painterResource(id = R.drawable.ic_fav)

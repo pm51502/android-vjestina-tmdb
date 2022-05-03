@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.tmdb.R
-import com.example.tmdb.ui.navigation.Screen
+import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
 import com.example.tmdb.ui.screens.shared.components.MovieCard
@@ -21,7 +21,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 
 @Composable
-fun FavoritesScreen(navController: NavHostController) {
+fun FavoritesScreen(navController: NavController) {
 
     var favoriteMovies by remember {
         mutableStateOf(MovieLoader.getFavoriteMovies())
@@ -53,7 +53,7 @@ fun FavoritesScreen(navController: NavHostController) {
                         onMovieItemClick = { movieId: Int ->
                             navigateToScreen(
                                 navController = navController,
-                                route = "${Screen.Details.route}/$movieId"
+                                route = "${RootScreen.Details.route}/$movieId"
                             )
                         },
                         onFavoriteClick = { movieId: Int ->
