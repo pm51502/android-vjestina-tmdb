@@ -12,9 +12,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tmdb.R
 import com.example.tmdb.ui.screens.MainScreen
-import com.example.tmdb.ui.screens.details.DetailsScreen
-import com.example.tmdb.ui.screens.favourites.FavoritesScreen
-import com.example.tmdb.ui.screens.home.HomeScreen
+import com.example.tmdb.ui.screens.DetailsScreen
+import com.example.tmdb.ui.screens.FavoritesScreen
+import com.example.tmdb.ui.screens.HomeScreen
 
 sealed class RootScreen(val route: String, @StringRes val resourceId: Int) {
     object Main : RootScreen(route = "main", R.string.main)

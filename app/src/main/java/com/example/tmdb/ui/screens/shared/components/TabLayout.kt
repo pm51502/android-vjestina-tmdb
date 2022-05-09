@@ -12,14 +12,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
+import kotlinx.coroutines.Job
 
 @Composable
 fun TabLayout(
     modifier: Modifier = Modifier,
     title: String,
-    tabItems: Map<String, List<MovieItemViewState>>,
+    tabItems: Map<String, List<MovieItem>>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movieId: Int) -> Job
 ) {
     var tabIndex by remember { mutableStateOf(0) }
     val movieTitles = tabItems.keys.toList()
@@ -68,7 +69,7 @@ fun TabLayout(
         }
         ListDivider()
 
-        val movieItems: List<MovieItemViewState>? = tabItems[movieTitles[tabIndex]]
+        val movieItems: List<MovieItem>? = tabItems[movieTitles[tabIndex]]
         if(movieItems != null)
             MoviesList(
                 movieItems = movieItems,
@@ -90,27 +91,27 @@ fun ListDivider(){
     )
 }
 
-@Preview
+/*@Preview
 @Composable
 fun TabLayoutPreview(){
     TabLayout(
         tabItems = mapOf(
             "Popular" to listOf(
-                MovieItemViewState(
+                MovieItem(
                     id = 1,
                     title = "Iron man",
                     overview = "",
                     imagePath = R.drawable.iron_man_1,
                     isFavorite = true
                 ),
-                MovieItemViewState(
+                MovieItem(
                     id = 2,
                     title = "Iron man",
                     overview = "",
                     imagePath = R.drawable.iron_man_1,
                     isFavorite = true
                 ),
-                MovieItemViewState(
+                MovieItem(
                     id = 3,
                     title = "Iron man",
                     overview = "",
@@ -119,21 +120,21 @@ fun TabLayoutPreview(){
                 )
             ),
             "Top rated" to listOf(
-                MovieItemViewState(
+                MovieItem(
                     id = 4,
                     title = "Iron man",
                     overview = "",
                     imagePath = R.drawable.iron_man_1,
                     isFavorite = true
                 ),
-                MovieItemViewState(
+                MovieItem(
                     id = 5,
                     title = "Iron man",
                     overview = "",
                     imagePath = R.drawable.iron_man_1,
                     isFavorite = true
                 ),
-                MovieItemViewState(
+                MovieItem(
                     id = 6,
                     title = "Iron man",
                     overview = "",
@@ -146,4 +147,4 @@ fun TabLayoutPreview(){
         onMovieItemClick = {},
         onFavoriteClick = {}
     )
-}
+}*/

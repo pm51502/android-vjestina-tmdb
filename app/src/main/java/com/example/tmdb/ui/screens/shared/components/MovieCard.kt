@@ -14,8 +14,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
+import kotlinx.coroutines.Job
 
-data class MovieItemViewState(
+data class MovieItem(
     val id: Int,
     val title: String,
     val overview: String,
@@ -27,9 +28,9 @@ data class MovieItemViewState(
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,
-    item: MovieItemViewState,
+    item: MovieItem,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movieId: Int) -> Job
 ) {
 
     Box(
@@ -49,7 +50,7 @@ fun MovieCard(
                 .clip(RoundedCornerShape(dimensionResource(id = R.dimen.border_radius))),
             contentScale = ContentScale.Crop
         )
-        FavouriteButton(
+        FavoriteButton(
             modifier = Modifier.padding(
                 start = dimensionResource(id = R.dimen.small_spacing),
                 top = dimensionResource(id = R.dimen.small_spacing)
@@ -61,11 +62,11 @@ fun MovieCard(
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun MovieCardPreview() {
     MovieCard(
-        item = MovieItemViewState(
+        item = MovieItem(
             id = 1,
             title = "Iron man",
             overview = "",
@@ -75,4 +76,4 @@ fun MovieCardPreview() {
         onFavoriteClick = {},
         onMovieItemClick = {}
     )
-}
+}*/

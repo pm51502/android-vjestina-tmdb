@@ -1,8 +1,11 @@
-package com.example.tmdb.ui.screens.details
+package com.example.tmdb.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,6 +15,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,27 +26,31 @@ import com.example.tmdb.R
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.screens.shared.components.CastList
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
-import com.example.tmdb.ui.screens.shared.components.FavouriteButton
 import com.example.tmdb.ui.screens.shared.components.TopBar
-import com.example.tmdb.utils.MovieLoader
+import com.example.tmdb.viewmodels.DetailsViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import org.koin.androidx.compose.viewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun DetailsScreen(
     modifier: Modifier = Modifier,
     rootNavController: NavHostController,
-    movieId: Int?
+    movieId: Int?,
 ) {
+    val detailsViewModel by viewModel<DetailsViewModel> { parametersOf(movieId) }
 
-    var movieDetails by remember {
+    /*var movieDetails by remember {
         mutableStateOf(
             MovieLoader.getMovieDetails(
                 movieId = (movieId ?: 0)
             )
         )
-    }
+    }*/
+
+    val movieDetails = detailsViewModel.movieDetailsStateFlow.collectAsState()
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
@@ -62,7 +70,7 @@ fun DetailsScreen(
                         .height(dimensionResource(id = R.dimen.details_image_height))
                 ) {
                     Image(
-                        painter = painterResource(id = movieDetails.imagePath),
+                        painter = painterResource(id = movieDetails.value.imagePath),
                         contentDescription = stringResource(id = R.string.details_image),
                         alignment = Alignment.TopStart,
                         contentScale = ContentScale.Crop,
@@ -87,18 +95,18 @@ fun DetailsScreen(
                             top = dimensionResource(id = R.dimen.details_column_top_padding)
                         )
                     ) {
-                        UserScore(userScore = movieDetails.userScore)
+                        UserScore(userScore = movieDetails.value.userScore)
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
 
                         Row {
                             Text(
-                                text = movieDetails.title,
+                                text = movieDetails.value.title,
                                 style = MaterialTheme.typography.h2
                             )
 
                             Text(
-                                text = "(${movieDetails.year})",
+                                text = "(${movieDetails.value.year})",
                                 modifier = modifier.padding(start = dimensionResource(id = R.dimen.padding_xxsm)),
                                 style = MaterialTheme.typography.h2,
                                 fontWeight = FontWeight.Bold,
@@ -108,27 +116,20 @@ fun DetailsScreen(
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
 
                         Text(
-                            text = "${movieDetails.date} (${movieDetails.country})",
+                            text = "${movieDetails.value.date} (${movieDetails.value.country})",
                             style = MaterialTheme.typography.subtitle1
                         )
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_s)))
 
                         Text(
-                            text = "${movieDetails.genres.joinToString()} ${movieDetails.duration}",
+                            text = "${movieDetails.value.genres.joinToString()} ${movieDetails.value.duration}",
                             style = MaterialTheme.typography.subtitle1
                         )
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_xl)))
 
-                        FavouriteButton(
-                            movieId = movieDetails.id,
-                            isFavorite = movieDetails.isFavorite,
-                            onFavoriteClick = {
-                                movieDetails =
-                                    movieDetails.copy().apply { isFavorite = isFavorite.not() }
-                            }
-                        )
+                        StarButton()
                     }
                 }
             }
@@ -138,7 +139,7 @@ fun DetailsScreen(
                     ContentTitle(text = stringResource(id = R.string.overview))
 
                     Text(
-                        text = movieDetails.overview,
+                        text = movieDetails.value.overview,
                         modifier = modifier.padding(
                             start = dimensionResource(id = R.dimen.padding_md),
                             top = dimensionResource(id = R.dimen.padding_xsm),
@@ -159,7 +160,7 @@ fun DetailsScreen(
                     mainAxisSpacing = dimensionResource(id = R.dimen.padding_md),
                     crossAxisSpacing = dimensionResource(id = R.dimen.padding_l)
                 ) {
-                    movieDetails.crew.forEach { (key, value) ->
+                    movieDetails.value.crew.forEach { (key, value) ->
                         value.forEach { v ->
                             CrewMember(name = v, crew = key)
                         }
@@ -171,7 +172,7 @@ fun DetailsScreen(
                 Column {
                     ContentTitle(text = stringResource(id = R.string.top_billed_cast))
                     Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_xxl)))
-                    CastList(castItems = movieDetails.topBilledCast)
+                    CastList(castItems = movieDetails.value.topBilledCast)
                 }
             }
         }
@@ -229,6 +230,24 @@ fun CrewMember(
         )
         Text(text = crew)
     }
+}
+
+@Composable
+fun StarButton(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_star),
+        contentDescription = null,
+        modifier = modifier
+            .clickable {}
+            .size(dimensionResource(id = R.dimen.large_spacing))
+            .background(
+                color = colorResource(id = R.color.dark_blue_60),
+                CircleShape
+            )
+            .padding(dimensionResource(id = R.dimen.small_spacing))
+    )
 }
 
 /*@Preview

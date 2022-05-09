@@ -13,13 +13,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
+import kotlinx.coroutines.Job
 
 @Composable
-fun FavouriteButton(
+fun FavoriteButton(
     modifier: Modifier = Modifier,
     movieId: Int,
     isFavorite: Boolean,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movieId: Int) -> Job
 ) {
     Image(
         painter = painterResource(id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),
@@ -38,13 +39,13 @@ fun FavouriteButton(
     )
 }
 
-
+/*
 @Preview
 @Composable
 fun FavouriteButtonPreview() {
-    FavouriteButton(
+    FavoriteButton(
         isFavorite = true,
         onFavoriteClick = {},
         movieId = 1
     )
-}
+}*/
