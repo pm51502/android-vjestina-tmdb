@@ -1,25 +1,25 @@
 package com.example.tmdb.utils
 
 import com.example.tmdb.R
-import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
+import com.example.tmdb.ui.screens.shared.components.MovieItem
 
 const val imagePath1 = R.drawable.iron_man_1
 const val imagePath2 = R.drawable.lion_king_
 
-data class MovieItemDetailState(
-    val id: Int,
-    val userScore: Float,
-    val title: String,
-    val year: Int,
-    val date: String,
-    val country: String,
-    val genres: List<String>,
-    val duration: String,
-    val imagePath: Int,
-    var isFavorite: Boolean,
-    val overview: String,
-    val crew: Map<String, List<String>>,
-    val topBilledCast: List<Cast>,
+data class MovieItemDetail(
+    val id: Int = 0,
+    val userScore: Float = 0F,
+    val title: String = "",
+    val year: Int = 0,
+    val date: String = "",
+    val country: String = "",
+    val genres: List<String> = emptyList(),
+    val duration: String = "",
+    val imagePath: Int = 0,
+    var isFavorite: Boolean = false,
+    val overview: String = "",
+    val crew: Map<String, List<String>> = emptyMap(),
+    val topBilledCast: List<Cast> = emptyList(),
     //val imagePath: String
 )
 
@@ -32,96 +32,109 @@ data class Cast(
 
 object MovieLoader {
     var allMovies = listOf(
-        MovieItemViewState(
+        MovieItem(
             id = 1,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = true
+            isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 2,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = true
+            isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 3,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = true
+            isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 4,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 5,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 6,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 7,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = true
+            isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 8,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 9,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = true
+            isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 10,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 11,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
             isFavorite = false
         ),
-        MovieItemViewState(
+        MovieItem(
             id = 12,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = true
+            isFavorite = false
         )
     )
 
+    fun toggleFavorite(movieId: Int): MovieItem {
+        val movie = allMovies.first { it.id == movieId }
+        val index = allMovies.indexOf(movie)
+        val updatedMovie = movie.copy(isFavorite = movie.isFavorite.not())
+
+        allMovies = allMovies.toMutableList().apply { set(index, updatedMovie) }
+
+        return updatedMovie.copy()
+    }
+
+    fun getMovieById(movieId: Int): MovieItem = allMovies.first { it.id == movieId }
+
     fun getFavoriteMovies() = allMovies.filter { it.isFavorite }
-    fun getMovieDetails(movieId: Int): MovieItemDetailState {
+
+    fun getMovieDetails(movieId: Int): MovieItemDetail {
         if (movieId % 2 != 0) {
-            return MovieItemDetailState(
+            return MovieItemDetail(
                 id = 1,
                 userScore = 0.76f,
                 title = "Iron man",
@@ -161,7 +174,7 @@ object MovieLoader {
                 )
             )
         } else {
-            return MovieItemDetailState(
+            return MovieItemDetail(
                 id = 2,
                 userScore = 0.71f,
                 title = "Lion king",

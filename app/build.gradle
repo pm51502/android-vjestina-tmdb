@@ -45,6 +45,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -63,4 +64,24 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
     implementation "com.google.accompanist:accompanist-flowlayout:0.20.0"
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
+    def koin_version= "3.2.0-beta-1"
+    // Koin main features for Android
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // No more koin-android-viewmodel, koin-android-scope, koin-android-fragment
+    // Java Compatibility
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+    // Jetpack WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    // Navigation Graph
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+    // Jetpack Compose
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    // Koin for Ktor
+    implementation "io.insert-koin:koin-ktor:$koin_version"
+    // SLF4J Logger
+    implementation "io.insert-koin:koin-logger-slf4j:$koin_version"
 }

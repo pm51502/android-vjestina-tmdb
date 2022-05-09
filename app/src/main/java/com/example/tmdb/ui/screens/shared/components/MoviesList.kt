@@ -9,13 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
+import kotlinx.coroutines.Job
 
 @Composable
 fun MoviesList(
     modifier: Modifier = Modifier,
-    movieItems: List<MovieItemViewState>,
+    movieItems: List<MovieItem>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movieId: Int) -> Job
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
@@ -35,26 +36,26 @@ fun MoviesList(
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun MoviesListPreview() {
     MoviesList(
         movieItems = listOf(
-            MovieItemViewState(
+            MovieItem(
                 id = 1,
                 title = "Iron man",
                 overview = "",
                 imagePath = R.drawable.iron_man_1,
                 isFavorite = true
             ),
-            MovieItemViewState(
+            MovieItem(
                 id = 2,
                 title = "Iron man",
                 overview = "",
                 imagePath = R.drawable.iron_man_1,
                 isFavorite = true
             ),
-            MovieItemViewState(
+            MovieItem(
                 id = 3,
                 title = "Iron man",
                 overview = "",
@@ -65,4 +66,4 @@ fun MoviesListPreview() {
         onFavoriteClick = {},
         onMovieItemClick = {}
     )
-}
+}*/
