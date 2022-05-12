@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
 import kotlinx.coroutines.Job
 
@@ -18,7 +17,7 @@ import kotlinx.coroutines.Job
 fun TabLayout(
     modifier: Modifier = Modifier,
     title: String,
-    tabItems: Map<String, List<MovieItem>>,
+    tabItems: Map<String, List<MovieItemViewState>>,
     onMovieItemClick: (movieId: Int) -> Unit,
     onFavoriteClick: (movieId: Int) -> Job
 ) {
@@ -69,7 +68,7 @@ fun TabLayout(
         }
         ListDivider()
 
-        val movieItems: List<MovieItem>? = tabItems[movieTitles[tabIndex]]
+        val movieItems: List<MovieItemViewState>? = tabItems[movieTitles[tabIndex]]
         if(movieItems != null)
             MoviesList(
                 movieItems = movieItems,

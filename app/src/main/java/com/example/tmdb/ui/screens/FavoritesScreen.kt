@@ -1,5 +1,6 @@
 package com.example.tmdb.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,15 +10,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.tmdb.R
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
 import com.example.tmdb.ui.screens.shared.components.MovieCard
-import com.example.tmdb.utils.MovieLoader
 import com.example.tmdb.viewmodels.FavoritesViewModel
-import com.example.tmdb.viewmodels.HomeViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
@@ -28,11 +26,7 @@ import org.koin.androidx.compose.viewModel
 fun FavoritesScreen(navController: NavController) {
     val favoritesViewModel by viewModel<FavoritesViewModel>()
 
-    /*var favoriteMovies by remember {
-        mutableStateOf(MovieLoader.getFavoriteMovies())
-    }*/
-
-    val favoriteMovies = favoritesViewModel.favoriteMoviesStateFlow.collectAsState()
+    val favoriteMovies = favoritesViewModel.favoriteMoviesStateFlow.collectAsState(emptyList())
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn {
@@ -65,16 +59,10 @@ fun FavoritesScreen(navController: NavController) {
                             )
                         },
                         onFavoriteClick = { movieId: Int ->
-
                             coroutineScope.launch {
                                 favoritesViewModel.toggleFavorite(movieId = movieId)
+                                Log.i("FAV MOVIES STATE", favoriteMovies.value.toString())
                             }
-
-                            /*val movie = favoriteMovies.first { it.id == movieId }
-                            val index = favoriteMovies.indexOf(movie)
-                            val updatedMovie = movie.copy(isFavorite = movie.isFavorite.not())
-
-                            favoriteMovies = favoriteMovies.toMutableList().apply { set(index, updatedMovie) }*/
                         }
                     )
                 }

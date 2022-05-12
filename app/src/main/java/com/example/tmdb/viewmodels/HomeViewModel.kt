@@ -3,62 +3,45 @@ package com.example.tmdb.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.data.MovieRepository
-import com.example.tmdb.ui.screens.shared.components.MovieItem
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
+import kotlinx.coroutines.flow.*
+import com.example.tmdb.data.MovieRepositoryImpl.MovieCategory
+import com.example.tmdb.data.toMovieItemViewState
 
 class HomeViewModel(
     private val movieRepository: MovieRepository,
 ) : ViewModel() {
-
-    private val _popularMoviesStateFlow = MutableStateFlow<List<MovieItem>>(emptyList())
-    val popularMoviesStateFlow = _popularMoviesStateFlow.asStateFlow()
-
-    private val _topRatedMoviesStateFlow = MutableStateFlow<List<MovieItem>>(emptyList())
-    val topRatedMoviesStateFlow = _topRatedMoviesStateFlow.asStateFlow()
-
-    private val _nowPlayingMoviesStateFlow = MutableStateFlow<List<MovieItem>>(emptyList())
-    val nowPlayingMoviesStateFlow = _nowPlayingMoviesStateFlow.asStateFlow()
-
-    private val _upcomingMoviesStateFlow = MutableStateFlow<List<MovieItem>>(emptyList())
-    val upcomingMoviesStateFlow = _upcomingMoviesStateFlow.asStateFlow()
-
-    private suspend fun getPopularMovies() {
-        movieRepository.getPopularMovies()
-            .collect { movieList -> _popularMoviesStateFlow.emit(movieList) }
-    }
-
-    private suspend fun getTopRatedMovies() {
-        movieRepository.getTopRatedMovies()
-            .collect { movieList -> _topRatedMoviesStateFlow.emit(movieList) }
-    }
-
-    private suspend fun getNowPlayingMovies() {
-        movieRepository.getNowPlayingMovies()
-            .collect { movieList -> _nowPlayingMoviesStateFlow.emit(movieList) }
-    }
-
-    private suspend fun getUpcomingMovies() {
-        movieRepository.getUpcomingMovies()
-            .collect { movieList -> _upcomingMoviesStateFlow.emit(movieList) }
-    }
+    val popularMoviesStateFlow = getCombinedFlow(MovieCategory.PopularMovies)
+    val topRatedMoviesStateFlow = getCombinedFlow(MovieCategory.TopRatedMovies)
+    val nowPlayingMoviesStateFlow = getCombinedFlow(MovieCategory.NowPlayingMovies)
+    val upcomingMoviesStateFlow = getCombinedFlow(MovieCategory.UpcomingMovies)
 
     suspend fun toggleFavorite(movieId: Int) {
         movieRepository.toggleFavorite(movieId = movieId)
-
-        getPopularMovies()
-        getTopRatedMovies()
-        getNowPlayingMovies()
-        getUpcomingMovies()
     }
 
-    init {
-        viewModelScope.launch {
-            getPopularMovies()
-            getTopRatedMovies()
-            getNowPlayingMovies()
-            getUpcomingMovies()
+    private fun getCombinedFlow(movieCategory: MovieCategory): StateFlow<List<MovieItemViewState>> {
+        val moviesFlow = when(movieCategory) {
+            is MovieCategory.PopularMovies -> movieRepository.getPopularMovies()
+            is MovieCategory.TopRatedMovies -> movieRepository.getTopRatedMovies()
+            is MovieCategory.NowPlayingMovies -> movieRepository.getNowPlayingMovies()
+            is MovieCategory.UpcomingMovies -> movieRepository.getUpcomingMovies()
         }
+
+        return combine(
+            moviesFlow,
+            movieRepository.getFavoriteMovies()
+        ) { movieList, favoriteList ->
+            movieList.map { movieItem ->
+                toMovieItemViewState(
+                    movieItem = movieItem,
+                    isFavorite = favoriteList.map { movie -> movie.id }.contains(movieItem.id)
+                )
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
     }
 }

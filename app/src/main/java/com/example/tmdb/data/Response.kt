@@ -1,6 +1,5 @@
 package com.example.tmdb.data
 
-import com.example.tmdb.ui.screens.shared.components.MovieItem
 import com.example.tmdb.utils.MovieItemDetail
 
 data class MovieResponse(

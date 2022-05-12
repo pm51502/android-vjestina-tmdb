@@ -41,15 +41,6 @@ fun DetailsScreen(
     movieId: Int?,
 ) {
     val detailsViewModel by viewModel<DetailsViewModel> { parametersOf(movieId) }
-
-    /*var movieDetails by remember {
-        mutableStateOf(
-            MovieLoader.getMovieDetails(
-                movieId = (movieId ?: 0)
-            )
-        )
-    }*/
-
     val movieDetails = detailsViewModel.movieDetailsStateFlow.collectAsState()
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()

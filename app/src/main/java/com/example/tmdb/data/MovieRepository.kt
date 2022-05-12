@@ -1,53 +1,39 @@
 package com.example.tmdb.data
 
-import androidx.compose.runtime.rememberCoroutineScope
-import com.example.tmdb.ui.screens.shared.components.MovieItem
 import com.example.tmdb.utils.MovieItemDetail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
+data class MovieItem(
+    val id: Int,
+    val title: String,
+    val overview: String,
+    val imagePath: Int
+)
+
 interface MovieRepository {
     fun getPopularMovies(): Flow<List<MovieItem>>
-
     fun getTopRatedMovies(): Flow<List<MovieItem>>
-
     fun getNowPlayingMovies(): Flow<List<MovieItem>>
-
     fun getUpcomingMovies(): Flow<List<MovieItem>>
-
     fun getMovieSearchResults(query: String): Flow<List<MovieItem>>
-
     fun getFavoriteMovies(): Flow<List<MovieItem>>
-
     fun getMovieDetails(movieId: Int): Flow<MovieItemDetail>
-
     suspend fun toggleFavorite(movieId: Int)
-    /*suspend fun addMovieToFavorites(movie: MovieItem)
-
-    suspend fun removeMovieFromFavorites(movieId: Int)*/
 }
 
 class MovieRepositoryImpl(
     private val movieApi: MovieApi,
     private val movieDatabase: MovieDatabase
 ): MovieRepository  {
+    override fun getPopularMovies(): Flow<List<MovieItem>> = popularMoviesFlow
 
-    override fun getPopularMovies(): Flow<List<MovieItem>> = flow {
-        emit(movieApi.getPopularMovies().movieList)
-    }
+    override fun getTopRatedMovies(): Flow<List<MovieItem>> = topRatedMoviesFlow
 
-    override fun getTopRatedMovies(): Flow<List<MovieItem>> = flow {
-        emit(movieApi.getTopRatedMovies().movieList)
-    }
+    override fun getNowPlayingMovies(): Flow<List<MovieItem>> = nowPlayingMoviesFlow
 
-    override fun getNowPlayingMovies(): Flow<List<MovieItem>> = flow {
-        emit(movieApi.getNowPlayingMovies().movieList)
-    }
-
-    override fun getUpcomingMovies(): Flow<List<MovieItem>> = flow {
-        emit(movieApi.getUpcomingMovies().movieList)
-    }
+    override fun getUpcomingMovies(): Flow<List<MovieItem>> = upcomingMoviesFlow
 
     override fun getMovieDetails(movieId: Int): Flow<MovieItemDetail> = flow {
         emit(movieApi.getMovieDetails(movieId = movieId).movieDetails)
@@ -57,39 +43,49 @@ class MovieRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    /*override fun getFavoriteMovies(): Flow<List<MovieItem>> = flow {
-        emit(movieDatabase.getFavoriteMovies())
-    }*/
+    override fun getFavoriteMovies(): Flow<List<MovieItem>> = favoriteMoviesFlow
 
     override suspend fun toggleFavorite(movieId: Int) {
-        //movieDatabase.toggleFavorite(movieId = movieId)
         movieDatabase.toggleFavorite(movieId = movieId)
         refreshFavouriteMoviesPublisher.emit(RefreshEvent)
     }
 
+    private val sharingScope = CoroutineScope(Dispatchers.Default)
+
+    private val popularMoviesFlow = getSharedFlow(MovieCategory.PopularMovies)
+    private val topRatedMoviesFlow =  getSharedFlow(MovieCategory.TopRatedMovies)
+    private val nowPlayingMoviesFlow =  getSharedFlow(MovieCategory.NowPlayingMovies)
+    private val upcomingMoviesFlow =  getSharedFlow(MovieCategory.UpcomingMovies)
+
     object RefreshEvent
-    private val refreshFavouriteMoviesPublisher = MutableSharedFlow<RefreshEvent>()
+    private val refreshFavouriteMoviesPublisher = MutableSharedFlow<RefreshEvent>(replay = 1)
 
     private val favoriteMoviesFlow = refreshFavouriteMoviesPublisher
+        .onStart { refreshFavouriteMoviesPublisher.emit(RefreshEvent) }
         .map { movieDatabase.getFavoriteMovies() }
         .shareIn(
-            CoroutineScope(Dispatchers.Default),
-            SharingStarted.WhileSubscribed(),
+            sharingScope,
+            SharingStarted.Lazily,
             replay = 1,
         )
 
-    override fun getFavoriteMovies() = favoriteMoviesFlow
+    private fun getSharedFlow(movieCategory: MovieCategory): Flow<List<MovieItem>> = flow {
+        when(movieCategory) {
+            is MovieCategory.PopularMovies -> emit(movieApi.getPopularMovies().movieList)
+            is MovieCategory.TopRatedMovies -> emit(movieApi.getTopRatedMovies().movieList)
+            is MovieCategory.NowPlayingMovies -> emit(movieApi.getNowPlayingMovies().movieList)
+            is MovieCategory.UpcomingMovies -> emit(movieApi.getUpcomingMovies().movieList)
+        }
+    }.shareIn(
+        sharingScope,
+        SharingStarted.Lazily,
+        replay = 1,
+    )
 
-    /*override suspend fun markMovieFavourite(movie: Movie, isFavourite: Boolean) {
-        movieDatabase.saveIsMovieFavourite(movie, isFavourite)
-        refreshFavouriteMoviesPublisher.emit(RefreshEvent)
-    }*/
-
-    /*override suspend fun addMovieToFavorites(movie: MovieItem) {
-        movieDatabase.addMovieToFavorites(movie = movie)
+    sealed class MovieCategory {
+        object PopularMovies: MovieCategory()
+        object TopRatedMovies: MovieCategory()
+        object NowPlayingMovies: MovieCategory()
+        object UpcomingMovies: MovieCategory()
     }
-
-    override suspend fun removeMovieFromFavorites(movieId: Int) {
-        movieDatabase.removeMovieFromFavorites(movieId = movieId)
-    }*/
 }
