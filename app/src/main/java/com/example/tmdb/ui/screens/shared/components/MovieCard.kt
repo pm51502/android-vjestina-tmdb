@@ -12,11 +12,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
 import kotlinx.coroutines.Job
 
-data class MovieItem(
+data class MovieItemViewState(
     val id: Int,
     val title: String,
     val overview: String,
@@ -28,7 +27,7 @@ data class MovieItem(
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,
-    item: MovieItem,
+    item: MovieItemViewState,
     onMovieItemClick: (movieId: Int) -> Unit,
     onFavoriteClick: (movieId: Int) -> Job
 ) {

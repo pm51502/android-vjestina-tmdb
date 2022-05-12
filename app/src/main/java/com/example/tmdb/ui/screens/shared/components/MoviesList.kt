@@ -7,14 +7,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
 import kotlinx.coroutines.Job
 
 @Composable
 fun MoviesList(
     modifier: Modifier = Modifier,
-    movieItems: List<MovieItem>,
+    movieItems: List<MovieItemViewState>,
     onMovieItemClick: (movieId: Int) -> Unit,
     onFavoriteClick: (movieId: Int) -> Job
 ) {

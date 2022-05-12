@@ -4,20 +4,14 @@ import com.example.tmdb.utils.MovieLoader
 
 interface MovieApi {
     suspend fun getPopularMovies(): MovieResponse
-
     suspend fun getTopRatedMovies(): MovieResponse
-
     suspend fun getNowPlayingMovies(): MovieResponse
-
     suspend fun getUpcomingMovies(): MovieResponse
-
     suspend fun getMovieSearchResults(query: String): MovieResponse
-
     suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse
 }
 
 internal class MovieApiImpl: MovieApi {
-
     override suspend fun getPopularMovies(): MovieResponse =
         MovieResponse(movieList = MovieLoader.allMovies.slice(0..2).toList())
 

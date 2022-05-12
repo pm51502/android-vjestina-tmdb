@@ -1,7 +1,7 @@
 package com.example.tmdb.utils
 
 import com.example.tmdb.R
-import com.example.tmdb.ui.screens.shared.components.MovieItem
+import com.example.tmdb.data.MovieItem
 
 const val imagePath1 = R.drawable.iron_man_1
 const val imagePath2 = R.drawable.lion_king_
@@ -37,100 +37,74 @@ object MovieLoader {
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 2,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         ),
         MovieItem(
             id = 3,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 4,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         ),
         MovieItem(
             id = 5,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 6,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         ),
         MovieItem(
             id = 7,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 8,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         ),
         MovieItem(
             id = 9,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 10,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         ),
         MovieItem(
             id = 11,
             title = "Iron man",
             overview = "",
             imagePath = imagePath1,
-            isFavorite = false
         ),
         MovieItem(
             id = 12,
             title = "Lion king",
             overview = "",
             imagePath = imagePath2,
-            isFavorite = false
         )
     )
-
-    fun toggleFavorite(movieId: Int): MovieItem {
-        val movie = allMovies.first { it.id == movieId }
-        val index = allMovies.indexOf(movie)
-        val updatedMovie = movie.copy(isFavorite = movie.isFavorite.not())
-
-        allMovies = allMovies.toMutableList().apply { set(index, updatedMovie) }
-
-        return updatedMovie.copy()
-    }
-
-    fun getMovieById(movieId: Int): MovieItem = allMovies.first { it.id == movieId }
-
-    fun getFavoriteMovies() = allMovies.filter { it.isFavorite }
 
     fun getMovieDetails(movieId: Int): MovieItemDetail {
         if (movieId % 2 != 0) {

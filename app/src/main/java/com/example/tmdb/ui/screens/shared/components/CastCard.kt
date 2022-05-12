@@ -23,7 +23,7 @@ fun CastCard(
     modifier: Modifier = Modifier,
     item: Cast
 ) {
-    Card() {
+    Card {
         Image(
             painter = painterResource(id = item.imagePath),
             contentDescription = stringResource(id = R.string.cast_card_image),
@@ -41,7 +41,7 @@ fun CastCard(
                 .padding(top = dimensionResource(id = R.dimen.cast_card_top_surface_padding))
                 .width(dimensionResource(id = R.dimen.cast_card_width))
         ) {
-            Column() {
+            Column {
                 Text(
                     text = item.name,
                     modifier = modifier.padding(dimensionResource(id = R.dimen.padding_xxsm)),
