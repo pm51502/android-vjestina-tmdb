@@ -19,7 +19,7 @@ fun TabLayout(
     title: String,
     tabItems: Map<String, List<MovieItemViewState>>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Job
+    onFavoriteClick: (movieId: Int) -> Unit
 ) {
     var tabIndex by remember { mutableStateOf(0) }
     val movieTitles = tabItems.keys.toList()

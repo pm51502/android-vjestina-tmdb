@@ -1,9 +1,12 @@
 package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tmdb.data.MovieRepository
 import com.example.tmdb.data.toMovieItemViewState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val movieRepository: MovieRepository
@@ -13,14 +16,13 @@ class FavoritesViewModel(
         .getFavoriteMovies()
         .map { movieList ->
             movieList.map { movieItem ->
-                toMovieItemViewState(
-                    movieItem = movieItem,
-                    isFavorite = true
-                )
+                movieItem.toMovieItemViewState(isFavorite = true)
             }
         }
 
-    suspend fun toggleFavorite(movieId: Int) {
-        movieRepository.toggleFavorite(movieId = movieId)
+    fun toggleFavorite(movieId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            movieRepository.toggleFavorite(movieId = movieId)
+        }
     }
 }

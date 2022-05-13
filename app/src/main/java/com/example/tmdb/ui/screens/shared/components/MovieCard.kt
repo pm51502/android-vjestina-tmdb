@@ -29,7 +29,7 @@ fun MovieCard(
     modifier: Modifier = Modifier,
     item: MovieItemViewState,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Job
+    onFavoriteClick: (movieId: Int) -> Unit
 ) {
 
     Box(

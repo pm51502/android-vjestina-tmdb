@@ -20,7 +20,7 @@ fun FavoriteButton(
     modifier: Modifier = Modifier,
     movieId: Int,
     isFavorite: Boolean,
-    onFavoriteClick: (movieId: Int) -> Job
+    onFavoriteClick: (movieId: Int) -> Unit
 ) {
     Image(
         painter = painterResource(id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),

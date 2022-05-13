@@ -15,7 +15,7 @@ fun MoviesList(
     modifier: Modifier = Modifier,
     movieItems: List<MovieItemViewState>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Job
+    onFavoriteClick: (movieId: Int) -> Unit
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),

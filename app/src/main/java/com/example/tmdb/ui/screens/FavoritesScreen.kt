@@ -1,6 +1,5 @@
 package com.example.tmdb.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,15 +18,12 @@ import com.example.tmdb.viewmodels.FavoritesViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.viewModel
 
 @Composable
 fun FavoritesScreen(navController: NavController) {
     val favoritesViewModel by viewModel<FavoritesViewModel>()
-
-    val favoriteMovies = favoritesViewModel.favoriteMoviesStateFlow.collectAsState(emptyList())
-    val coroutineScope = rememberCoroutineScope()
+    val favoriteMovies = favoritesViewModel.favoriteMoviesStateFlow.collectAsState(emptyList()).value
 
     LazyColumn {
         item {
@@ -45,7 +41,7 @@ fun FavoritesScreen(navController: NavController) {
                 mainAxisSpacing = dimensionResource(id = R.dimen.padding_md),
                 crossAxisSpacing = dimensionResource(id = R.dimen.padding_l)
             ) {
-                favoriteMovies.value.forEach { item ->
+                favoriteMovies.forEach { item ->
                     MovieCard(
                         item = item,
                         modifier = Modifier.size(
@@ -59,10 +55,7 @@ fun FavoritesScreen(navController: NavController) {
                             )
                         },
                         onFavoriteClick = { movieId: Int ->
-                            coroutineScope.launch {
-                                favoritesViewModel.toggleFavorite(movieId = movieId)
-                                Log.i("FAV MOVIES STATE", favoriteMovies.value.toString())
-                            }
+                            favoritesViewModel.toggleFavorite(movieId = movieId)
                         }
                     )
                 }
