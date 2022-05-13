@@ -7,6 +7,8 @@ import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 import kotlinx.coroutines.flow.*
 import com.example.tmdb.data.MovieRepositoryImpl.MovieCategory
 import com.example.tmdb.data.toMovieItemViewState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val movieRepository: MovieRepository,
@@ -16,8 +18,10 @@ class HomeViewModel(
     val nowPlayingMoviesStateFlow = getCombinedFlow(MovieCategory.NowPlayingMovies)
     val upcomingMoviesStateFlow = getCombinedFlow(MovieCategory.UpcomingMovies)
 
-    suspend fun toggleFavorite(movieId: Int) {
-        movieRepository.toggleFavorite(movieId = movieId)
+    fun toggleFavorite(movieId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            movieRepository.toggleFavorite(movieId = movieId)
+        }
     }
 
     private fun getCombinedFlow(movieCategory: MovieCategory): StateFlow<List<MovieItemViewState>> {
@@ -32,11 +36,9 @@ class HomeViewModel(
             moviesFlow,
             movieRepository.getFavoriteMovies()
         ) { movieList, favoriteList ->
+            val favoriteListIds = favoriteList.map { movie -> movie.id }
             movieList.map { movieItem ->
-                toMovieItemViewState(
-                    movieItem = movieItem,
-                    isFavorite = favoriteList.map { movie -> movie.id }.contains(movieItem.id)
-                )
+                movieItem.toMovieItemViewState(isFavorite = favoriteListIds.contains(movieItem.id))
             }
         }.stateIn(
             viewModelScope,

@@ -2,13 +2,12 @@ package com.example.tmdb.data
 
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 
-fun toMovieItemViewState(
-    movieItem: MovieItem,
+fun MovieItem.toMovieItemViewState(
     isFavorite: Boolean
 ): MovieItemViewState = MovieItemViewState(
-    id = movieItem.id,
-    title = movieItem.title,
-    overview = movieItem.overview,
-    imagePath = movieItem.imagePath,
+    id = id,
+    title = title,
+    overview = overview,
+    imagePath = imagePath,
     isFavorite = isFavorite
 )

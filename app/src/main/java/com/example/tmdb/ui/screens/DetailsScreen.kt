@@ -41,7 +41,7 @@ fun DetailsScreen(
     movieId: Int?,
 ) {
     val detailsViewModel by viewModel<DetailsViewModel> { parametersOf(movieId) }
-    val movieDetails = detailsViewModel.movieDetailsStateFlow.collectAsState()
+    val movieDetails = detailsViewModel.movieDetailsStateFlow.collectAsState().value
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
@@ -61,7 +61,7 @@ fun DetailsScreen(
                         .height(dimensionResource(id = R.dimen.details_image_height))
                 ) {
                     Image(
-                        painter = painterResource(id = movieDetails.value.imagePath),
+                        painter = painterResource(id = movieDetails.imagePath),
                         contentDescription = stringResource(id = R.string.details_image),
                         alignment = Alignment.TopStart,
                         contentScale = ContentScale.Crop,
@@ -86,18 +86,18 @@ fun DetailsScreen(
                             top = dimensionResource(id = R.dimen.details_column_top_padding)
                         )
                     ) {
-                        UserScore(userScore = movieDetails.value.userScore)
+                        UserScore(userScore = movieDetails.userScore)
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
 
                         Row {
                             Text(
-                                text = movieDetails.value.title,
+                                text = movieDetails.title,
                                 style = MaterialTheme.typography.h2
                             )
 
                             Text(
-                                text = "(${movieDetails.value.year})",
+                                text = "(${movieDetails.year})",
                                 modifier = modifier.padding(start = dimensionResource(id = R.dimen.padding_xxsm)),
                                 style = MaterialTheme.typography.h2,
                                 fontWeight = FontWeight.Bold,
@@ -107,14 +107,14 @@ fun DetailsScreen(
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
 
                         Text(
-                            text = "${movieDetails.value.date} (${movieDetails.value.country})",
+                            text = "${movieDetails.date} (${movieDetails.country})",
                             style = MaterialTheme.typography.subtitle1
                         )
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_s)))
 
                         Text(
-                            text = "${movieDetails.value.genres.joinToString()} ${movieDetails.value.duration}",
+                            text = "${movieDetails.genres.joinToString()} ${movieDetails.duration}",
                             style = MaterialTheme.typography.subtitle1
                         )
 
@@ -130,7 +130,7 @@ fun DetailsScreen(
                     ContentTitle(text = stringResource(id = R.string.overview))
 
                     Text(
-                        text = movieDetails.value.overview,
+                        text = movieDetails.overview,
                         modifier = modifier.padding(
                             start = dimensionResource(id = R.dimen.padding_md),
                             top = dimensionResource(id = R.dimen.padding_xsm),
@@ -151,7 +151,7 @@ fun DetailsScreen(
                     mainAxisSpacing = dimensionResource(id = R.dimen.padding_md),
                     crossAxisSpacing = dimensionResource(id = R.dimen.padding_l)
                 ) {
-                    movieDetails.value.crew.forEach { (key, value) ->
+                    movieDetails.crew.forEach { (key, value) ->
                         value.forEach { v ->
                             CrewMember(name = v, crew = key)
                         }
@@ -163,7 +163,7 @@ fun DetailsScreen(
                 Column {
                     ContentTitle(text = stringResource(id = R.string.top_billed_cast))
                     Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_xxl)))
-                    CastList(castItems = movieDetails.value.topBilledCast)
+                    CastList(castItems = movieDetails.topBilledCast)
                 }
             }
         }
