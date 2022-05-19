@@ -11,24 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.R
-import kotlinx.coroutines.Job
+import com.example.tmdb.data.MovieItem
+import com.example.tmdb.data.toMovieItem
 
 @Composable
 fun FavoriteButton(
     modifier: Modifier = Modifier,
-    movieId: Int,
-    isFavorite: Boolean,
-    onFavoriteClick: (movieId: Int) -> Unit
+    item: MovieItemViewState,
+    onFavoriteClick: (movie: MovieItem) -> Unit
 ) {
     Image(
-        painter = painterResource(id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),
+        painter = painterResource(id = if (item.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),
         contentDescription = null,
         modifier = modifier
             .clickable {
-                //val updatedMovie = movie.copy(isFavorite = isFavorite.not())
-                onFavoriteClick.invoke(movieId)
+                onFavoriteClick.invoke(item.toMovieItem())
             }
             .size(dimensionResource(id = R.dimen.large_spacing))
             .background(
@@ -38,14 +36,3 @@ fun FavoriteButton(
             .padding(dimensionResource(id = R.dimen.small_spacing))
     )
 }
-
-/*
-@Preview
-@Composable
-fun FavouriteButtonPreview() {
-    FavoriteButton(
-        isFavorite = true,
-        onFavoriteClick = {},
-        movieId = 1
-    )
-}*/

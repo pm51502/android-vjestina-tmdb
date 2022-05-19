@@ -7,9 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.tmdb.R
+import com.example.tmdb.data.MovieItem
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
@@ -54,8 +54,8 @@ fun FavoritesScreen(navController: NavController) {
                                 route = "${RootScreen.Details.route}/$movieId"
                             )
                         },
-                        onFavoriteClick = { movieId: Int ->
-                            favoritesViewModel.toggleFavorite(movieId = movieId)
+                        onFavoriteClick = { movie: MovieItem ->
+                            favoritesViewModel.toggleFavorite(movie = movie)
                         }
                     )
                 }
@@ -63,10 +63,3 @@ fun FavoritesScreen(navController: NavController) {
         }
     }
 }
-
-/*@Preview
-@Composable
-fun FavoritesScreenPreview() {
-    val navController = rememberNavController()
-    FavoritesScreen(navController = navController)
-}*/

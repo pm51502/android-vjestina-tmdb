@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
+import com.example.tmdb.data.MovieItem
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.TabLayout
@@ -23,8 +24,8 @@ fun HomeScreen(navController: NavController) {
         )
     }
 
-    val onFavoriteClick = { movieId: Int ->
-        homeViewModel.toggleFavorite(movieId = movieId)
+    val onFavoriteClick = { movie: MovieItem ->
+        homeViewModel.toggleFavorite(movie = movie)
     }
 
     val popularMovies = homeViewModel.popularMoviesStateFlow.collectAsState().value
@@ -73,10 +74,3 @@ fun HomeScreen(navController: NavController) {
     }
 
 }
-
-/*@Preview
-@Composable
-fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    HomeScreen(navController = navController)
-}*/

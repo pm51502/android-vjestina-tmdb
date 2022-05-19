@@ -11,17 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
+import coil.compose.rememberAsyncImagePainter
+
 import com.example.tmdb.R
-import kotlinx.coroutines.Job
+import com.example.tmdb.data.MovieItem
 
 data class MovieItemViewState(
     val id: Int,
     val title: String,
     val overview: String,
-    val imagePath: Int,
+    val imageUrl: String?,
     var isFavorite: Boolean
-    //val imagePath: String
 )
 
 @Composable
@@ -29,7 +29,7 @@ fun MovieCard(
     modifier: Modifier = Modifier,
     item: MovieItemViewState,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movie: MovieItem) -> Unit
 ) {
 
     Box(
@@ -37,9 +37,8 @@ fun MovieCard(
             onMovieItemClick.invoke(item.id)
         }
     ) {
-
         Image(
-            painter = painterResource(id = item.imagePath),
+            painter = rememberAsyncImagePainter(model = item.imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(
@@ -54,25 +53,8 @@ fun MovieCard(
                 start = dimensionResource(id = R.dimen.small_spacing),
                 top = dimensionResource(id = R.dimen.small_spacing)
             ),
-            movieId = item.id,
-            isFavorite = item.isFavorite,
+            item = item,
             onFavoriteClick = onFavoriteClick
         )
     }
 }
-
-/*@Preview
-@Composable
-fun MovieCardPreview() {
-    MovieCard(
-        item = MovieItem(
-            id = 1,
-            title = "Iron man",
-            overview = "",
-            imagePath = R.drawable.iron_man_1,
-            isFavorite = true
-        ),
-        onFavoriteClick = {},
-        onMovieItemClick = {}
-    )
-}*/

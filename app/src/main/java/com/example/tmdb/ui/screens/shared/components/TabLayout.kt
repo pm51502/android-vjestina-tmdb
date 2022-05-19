@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.example.tmdb.R
-import kotlinx.coroutines.Job
+import com.example.tmdb.data.MovieItem
 
 @Composable
 fun TabLayout(
@@ -19,7 +19,7 @@ fun TabLayout(
     title: String,
     tabItems: Map<String, List<MovieItemViewState>>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movieId: Int) -> Unit
+    onFavoriteClick: (movie: MovieItem) -> Unit
 ) {
     var tabIndex by remember { mutableStateOf(0) }
     val movieTitles = tabItems.keys.toList()
@@ -89,61 +89,3 @@ fun ListDivider(){
             .padding(vertical = dimensionResource(id = R.dimen.padding_xsm))
     )
 }
-
-/*@Preview
-@Composable
-fun TabLayoutPreview(){
-    TabLayout(
-        tabItems = mapOf(
-            "Popular" to listOf(
-                MovieItem(
-                    id = 1,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                ),
-                MovieItem(
-                    id = 2,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                ),
-                MovieItem(
-                    id = 3,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                )
-            ),
-            "Top rated" to listOf(
-                MovieItem(
-                    id = 4,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                ),
-                MovieItem(
-                    id = 5,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                ),
-                MovieItem(
-                    id = 6,
-                    title = "Iron man",
-                    overview = "",
-                    imagePath = R.drawable.iron_man_1,
-                    isFavorite = true
-                )
-            )
-        ),
-        title = "What's popular",
-        onMovieItemClick = {},
-        onFavoriteClick = {}
-    )
-}*/

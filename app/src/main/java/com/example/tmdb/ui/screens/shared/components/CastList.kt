@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.tmdb.R
-import com.example.tmdb.utils.Cast
+import com.example.tmdb.data.CastMember
 
 @Composable
 fun CastList(
     modifier: Modifier = Modifier,
-    castItems: List<Cast>
+    castItems: List<CastMember>
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),

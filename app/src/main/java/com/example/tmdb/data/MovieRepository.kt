@@ -1,16 +1,8 @@
 package com.example.tmdb.data
 
-import com.example.tmdb.utils.MovieItemDetail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-
-data class MovieItem(
-    val id: Int,
-    val title: String,
-    val overview: String,
-    val imagePath: Int
-)
 
 interface MovieRepository {
     fun getPopularMovies(): Flow<List<MovieItem>>
@@ -19,8 +11,9 @@ interface MovieRepository {
     fun getUpcomingMovies(): Flow<List<MovieItem>>
     fun getMovieSearchResults(query: String): Flow<List<MovieItem>>
     fun getFavoriteMovies(): Flow<List<MovieItem>>
-    fun getMovieDetails(movieId: Int): Flow<MovieItemDetail>
-    suspend fun toggleFavorite(movieId: Int)
+    fun getMovieDetails(movieId: Int): Flow<MovieDetailsResponse>
+    fun getMovieCredits(movieId: Int): Flow<MovieCreditsResponse>
+    suspend fun toggleFavorite(movie: MovieItem)
 }
 
 class MovieRepositoryImpl(
@@ -35,8 +28,12 @@ class MovieRepositoryImpl(
 
     override fun getUpcomingMovies(): Flow<List<MovieItem>> = upcomingMoviesFlow
 
-    override fun getMovieDetails(movieId: Int): Flow<MovieItemDetail> = flow {
-        emit(movieApi.getMovieDetails(movieId = movieId).movieDetails)
+    override fun getMovieDetails(movieId: Int): Flow<MovieDetailsResponse> = flow {
+        emit(movieApi.getMovieDetails(movieId = movieId))
+    }
+
+    override fun getMovieCredits(movieId: Int): Flow<MovieCreditsResponse> = flow {
+        emit(movieApi.getMovieCredits(movieId = movieId))
     }
 
     override fun getMovieSearchResults(query: String): Flow<List<MovieItem>> {
@@ -45,8 +42,8 @@ class MovieRepositoryImpl(
 
     override fun getFavoriteMovies(): Flow<List<MovieItem>> = favoriteMoviesFlow
 
-    override suspend fun toggleFavorite(movieId: Int) {
-        movieDatabase.toggleFavorite(movieId = movieId)
+    override suspend fun toggleFavorite(movie: MovieItem) {
+        movieDatabase.toggleFavorite(movie = movie)
         refreshFavouriteMoviesPublisher.emit(RefreshEvent)
     }
 
