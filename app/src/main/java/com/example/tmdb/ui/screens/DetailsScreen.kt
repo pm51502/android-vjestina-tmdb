@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -22,17 +23,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.tmdb.R
+import com.example.tmdb.data.CastMember
+import com.example.tmdb.data.CrewMember
+import com.example.tmdb.data.Genre
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.screens.shared.components.CastList
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
 import com.example.tmdb.ui.screens.shared.components.TopBar
 import com.example.tmdb.viewmodels.DetailsViewModel
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf
+
+data class MovieItemDetailViewState(
+    val id: Int = 0,
+    val userScore: Float = 0F,
+    val title: String = "",
+    val year: String = "",
+    val date: String = "",
+    val country: String = "",
+    val genres: List<Genre> = emptyList(),
+    val runtime: String = "",
+    val posterPath: String? = "",
+    val overview: String = "",
+    val crew: List<CrewMember> = emptyList(),
+    val topBilledCast: List<CastMember> = emptyList(),
+)
 
 @Composable
 fun DetailsScreen(
@@ -61,7 +78,7 @@ fun DetailsScreen(
                         .height(dimensionResource(id = R.dimen.details_image_height))
                 ) {
                     Image(
-                        painter = painterResource(id = movieDetails.imagePath),
+                        painter = rememberAsyncImagePainter(model = movieDetails.posterPath),
                         contentDescription = stringResource(id = R.string.details_image),
                         alignment = Alignment.TopStart,
                         contentScale = ContentScale.Crop,
@@ -107,14 +124,15 @@ fun DetailsScreen(
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
 
                         Text(
-                            text = "${movieDetails.date} (${movieDetails.country})",
+                            text = "${movieDetails.date} (${movieDetails.country.uppercase()})",
                             style = MaterialTheme.typography.subtitle1
                         )
 
                         Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_s)))
 
+
                         Text(
-                            text = "${movieDetails.genres.joinToString()} ${movieDetails.duration}",
+                            text = "${movieDetails.genres.joinToString { it.name }} ${movieDetails.runtime}",
                             style = MaterialTheme.typography.subtitle1
                         )
 
@@ -140,23 +158,9 @@ fun DetailsScreen(
                     )
                 }
             }
-
-             item {
-                FlowRow(
-                    modifier = Modifier.padding(
-                        start = dimensionResource(id = R.dimen.padding_md),
-                    ),
-                    mainAxisSize = SizeMode.Expand,
-                    mainAxisAlignment = FlowMainAxisAlignment.Start,
-                    mainAxisSpacing = dimensionResource(id = R.dimen.padding_md),
-                    crossAxisSpacing = dimensionResource(id = R.dimen.padding_l)
-                ) {
-                    movieDetails.crew.forEach { (key, value) ->
-                        value.forEach { v ->
-                            CrewMember(name = v, crew = key)
-                        }
-                    }
-                }
+            
+            item { 
+                CrewRow(crew = movieDetails.crew)
             }
 
             item {
@@ -187,7 +191,7 @@ fun UserScore(
             )
 
             Text(
-                text = "${(userScore * 100).toInt()}%",
+                text = "${userScore.toInt()}%",
                 modifier = modifier.padding(
                     start = dimensionResource(id = R.dimen.padding_xmd),
                     top = dimensionResource(id = R.dimen.padding_sm)
@@ -207,20 +211,16 @@ fun UserScore(
 }
 
 @Composable
-fun CrewMember(
+fun CrewMemberViewState(
     modifier: Modifier = Modifier,
     name: String,
-    crew: String
+    job: String
 ) {
-    Column(
-        modifier = modifier.width(dimensionResource(id = R.dimen.crew_member_column_width))
-    ) {
-        Text(
-            text = name,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Text(text = crew)
-    }
+    Text(
+        text = name,
+        fontWeight = FontWeight.ExtraBold
+    )
+    Text(text = job)
 }
 
 @Composable
@@ -241,11 +241,32 @@ fun StarButton(
     )
 }
 
-/*@Preview
 @Composable
-fun DetailsScreenPreview() {
-    DetailsScreen(
-        navController = rememberNavController(),
-        movieId = 1
-    )
-}*/
+fun CrewRow(
+    modifier: Modifier = Modifier,
+    crew: List<CrewMember>
+) {
+    LazyRow(
+        modifier = modifier.padding(start = dimensionResource(id = R.dimen.padding_md))
+    ) {
+        for (i in 0 until crew.size-1 step 2) {
+            item {
+                Column(
+                    modifier = modifier.padding(end = dimensionResource(id = R.dimen.padding_sm))
+                ) {
+                    CrewMemberViewState(
+                        name = crew[i].name,
+                        job = crew[i].job
+                    )
+
+                    Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.spacer_m)))
+
+                    CrewMemberViewState(
+                        name = crew[i + 1].name,
+                        job = crew[i + 1].job
+                    )
+                }
+            }
+        }
+    }
+}
