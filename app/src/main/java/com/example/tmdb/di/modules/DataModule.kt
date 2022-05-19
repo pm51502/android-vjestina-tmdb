@@ -14,9 +14,12 @@ val dataModule = module {
         )
     }
     single<MovieApi> {
-        MovieApiImpl()
+        MovieApiImpl(httpClient = get())
     }
     single<MovieDatabase> {
         MovieDatabaseImpl()
+    }
+    single {
+        httpClient
     }
 }

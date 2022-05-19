@@ -27,7 +27,7 @@
     <dimen name="home_movies_list_content_padding">18dp</dimen>
     <dimen name="favorites_movies_list_content_padding">18dp</dimen>
 
-    <dimen name="details_image_height">310dp</dimen>
+    <dimen name="details_image_height">330dp</dimen>
     <dimen name="details_column_start_padding">18dp</dimen>
     <dimen name="details_column_top_padding">115dp</dimen>
 

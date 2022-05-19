@@ -14,18 +14,23 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import coil.compose.rememberAsyncImagePainter
 import com.example.tmdb.R
-import com.example.tmdb.utils.Cast
+import com.example.tmdb.data.CastMember
 
 @Composable
 fun CastCard(
     modifier: Modifier = Modifier,
-    item: Cast
+    item: CastMember
 ) {
     Card {
         Image(
-            painter = painterResource(id = item.imagePath),
+            painter = rememberAsyncImagePainter(
+                model = item.profilePath,
+                error = painterResource(
+                    id = R.drawable.cast_placeholder
+                )
+            ),
             contentDescription = stringResource(id = R.string.cast_card_image),
             modifier = modifier
                 .size(
@@ -54,14 +59,4 @@ fun CastCard(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun CastCardPreview(){
-    CastCard(item = Cast(
-        name = "Chiwetel Ejiofor",
-        character = "Scar (voice)",
-        imagePath = R.drawable.actor_1
-    ))
 }

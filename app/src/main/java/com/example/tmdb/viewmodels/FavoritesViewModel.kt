@@ -2,6 +2,7 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.data.MovieItem
 import com.example.tmdb.data.MovieRepository
 import com.example.tmdb.data.toMovieItemViewState
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,9 @@ class FavoritesViewModel(
             }
         }
 
-    fun toggleFavorite(movieId: Int) {
+    fun toggleFavorite(movie: MovieItem) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.toggleFavorite(movieId = movieId)
+            movieRepository.toggleFavorite(movie = movie)
         }
     }
 }

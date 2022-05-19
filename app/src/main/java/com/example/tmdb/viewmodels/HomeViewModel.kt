@@ -2,6 +2,7 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.data.MovieItem
 import com.example.tmdb.data.MovieRepository
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 import kotlinx.coroutines.flow.*
@@ -18,9 +19,9 @@ class HomeViewModel(
     val nowPlayingMoviesStateFlow = getCombinedFlow(MovieCategory.NowPlayingMovies)
     val upcomingMoviesStateFlow = getCombinedFlow(MovieCategory.UpcomingMovies)
 
-    fun toggleFavorite(movieId: Int) {
+    fun toggleFavorite(movie: MovieItem) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.toggleFavorite(movieId = movieId)
+            movieRepository.toggleFavorite(movie = movie)
         }
     }
 
