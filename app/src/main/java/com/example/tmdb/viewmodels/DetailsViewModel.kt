@@ -2,9 +2,9 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.data.MovieRepository
-import com.example.tmdb.data.toMovieDetailsViewState
+import com.example.tmdb.repository.MovieRepository
 import com.example.tmdb.ui.screens.MovieItemDetailViewState
+import com.example.tmdb.utils.toMovieDetailsViewState
 import kotlinx.coroutines.flow.*
 
 class DetailsViewModel(

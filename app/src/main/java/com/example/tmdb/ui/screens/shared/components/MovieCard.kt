@@ -12,9 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import coil.compose.rememberAsyncImagePainter
-
 import com.example.tmdb.R
-import com.example.tmdb.data.MovieItem
 
 data class MovieItemViewState(
     val id: Int,
@@ -29,7 +27,7 @@ fun MovieCard(
     modifier: Modifier = Modifier,
     item: MovieItemViewState,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movie: MovieItem) -> Unit
+    onFavoriteClick: (movie: MovieItemViewState) -> Unit
 ) {
 
     Box(

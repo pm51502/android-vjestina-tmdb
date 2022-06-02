@@ -12,21 +12,20 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import com.example.tmdb.R
-import com.example.tmdb.data.MovieItem
-import com.example.tmdb.data.toMovieItem
 
 @Composable
 fun FavoriteButton(
     modifier: Modifier = Modifier,
     item: MovieItemViewState,
-    onFavoriteClick: (movie: MovieItem) -> Unit
+    onFavoriteClick: (movie: MovieItemViewState) -> Unit
 ) {
     Image(
         painter = painterResource(id = if (item.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite),
         contentDescription = null,
         modifier = modifier
             .clickable {
-                onFavoriteClick.invoke(item.toMovieItem())
+                onFavoriteClick.invoke(item.copy(isFavorite = item.isFavorite.not()))
+                //onFavoriteClick.invoke(item.toMovieItem())
             }
             .size(dimensionResource(id = R.dimen.large_spacing))
             .background(

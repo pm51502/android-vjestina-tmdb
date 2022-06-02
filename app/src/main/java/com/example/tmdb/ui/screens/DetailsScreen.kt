@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.tmdb.R
-import com.example.tmdb.data.CastMember
-import com.example.tmdb.data.CrewMember
-import com.example.tmdb.data.Genre
+import com.example.tmdb.network.CastMember
+import com.example.tmdb.network.CrewMember
+import com.example.tmdb.network.Genre
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.screens.shared.components.CastList
 import com.example.tmdb.ui.screens.shared.components.ContentTitle

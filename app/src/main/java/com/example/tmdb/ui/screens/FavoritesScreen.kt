@@ -9,11 +9,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.tmdb.R
-import com.example.tmdb.data.MovieItem
 import com.example.tmdb.ui.navigation.RootScreen
 import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
 import com.example.tmdb.ui.screens.shared.components.MovieCard
+import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
+import com.example.tmdb.utils.toDbMovie
 import com.example.tmdb.viewmodels.FavoritesViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -54,8 +55,13 @@ fun FavoritesScreen(navController: NavController) {
                                 route = "${RootScreen.Details.route}/$movieId"
                             )
                         },
-                        onFavoriteClick = { movie: MovieItem ->
-                            favoritesViewModel.toggleFavorite(movie = movie)
+                        onFavoriteClick = { movie: MovieItemViewState ->
+                            if (!movie.isFavorite)
+                                favoritesViewModel.removeFavoriteMovie(movieId = movie.id)
+                            else
+                                favoritesViewModel.addFavoriteMovie(movie = movie.toDbMovie())
+
+                            //favoritesViewModel.toggleFavorite(movie = movie)
                         }
                     )
                 }

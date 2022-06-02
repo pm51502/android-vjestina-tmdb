@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
 import com.example.tmdb.R
-import com.example.tmdb.data.CastMember
+import com.example.tmdb.network.CastMember
 
 @Composable
 fun CastCard(

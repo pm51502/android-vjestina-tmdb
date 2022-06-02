@@ -1,4 +1,4 @@
-package com.example.tmdb.data
+package com.example.tmdb.network
 
 import android.util.Log
 import io.ktor.client.*

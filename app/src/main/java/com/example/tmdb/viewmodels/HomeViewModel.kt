@@ -2,12 +2,12 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.data.MovieItem
-import com.example.tmdb.data.MovieRepository
+import com.example.tmdb.database.entity.DbMovie
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 import kotlinx.coroutines.flow.*
-import com.example.tmdb.data.MovieRepositoryImpl.MovieCategory
-import com.example.tmdb.data.toMovieItemViewState
+import com.example.tmdb.repository.MovieRepositoryImpl.MovieCategory
+import com.example.tmdb.repository.MovieRepository
+import com.example.tmdb.utils.toMovieItemViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,9 +19,15 @@ class HomeViewModel(
     val nowPlayingMoviesStateFlow = getCombinedFlow(MovieCategory.NowPlayingMovies)
     val upcomingMoviesStateFlow = getCombinedFlow(MovieCategory.UpcomingMovies)
 
-    fun toggleFavorite(movie: MovieItem) {
+    fun addFavoriteMovie(movie: DbMovie) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.toggleFavorite(movie = movie)
+            movieRepository.insertMovie(movie = movie)
+        }
+    }
+
+    fun removeFavoriteMovie(movieId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            movieRepository.deleteMovie(movieId = movieId)
         }
     }
 
@@ -48,3 +54,9 @@ class HomeViewModel(
         )
     }
 }
+
+/*fun toggleFavorite(movie: MovieItem) {
+        viewModelScope.launch(Dispatchers.Default) {
+            movieRepository.toggleFavorite(movie = movie)
+        }
+    }*/

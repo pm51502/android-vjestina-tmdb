@@ -11,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import com.example.tmdb.R
-import com.example.tmdb.data.MovieItem
 
 @Composable
 fun TabLayout(
@@ -19,7 +18,7 @@ fun TabLayout(
     title: String,
     tabItems: Map<String, List<MovieItemViewState>>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movie: MovieItem) -> Unit
+    onFavoriteClick: (movie: MovieItemViewState) -> Unit
 ) {
     var tabIndex by remember { mutableStateOf(0) }
     val movieTitles = tabItems.keys.toList()
