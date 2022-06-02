@@ -1,8 +1,11 @@
 package com.example.tmdb.ui.screens
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -58,11 +61,13 @@ fun MainScreen(
                 }
             }
         }
-    ) {
-        BottomBarNavHost(
-            rootNavController = rootNavController,
-            bottomBarNavController = bottomBarNavController
-        )
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            BottomBarNavHost(
+                rootNavController = rootNavController,
+                bottomBarNavController = bottomBarNavController
+            )
+        }
     }
 }
 

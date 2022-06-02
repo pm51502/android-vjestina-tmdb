@@ -8,14 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.tmdb.R
-import com.example.tmdb.data.MovieItem
 
 @Composable
 fun MoviesList(
     modifier: Modifier = Modifier,
     movieItems: List<MovieItemViewState>,
     onMovieItemClick: (movieId: Int) -> Unit,
-    onFavoriteClick: (movie: MovieItem) -> Unit
+    onFavoriteClick: (movie: MovieItemViewState) -> Unit
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),

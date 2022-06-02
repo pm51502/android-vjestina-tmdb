@@ -1,5 +1,9 @@
-package com.example.tmdb.data
+package com.example.tmdb.repository
 
+import com.example.tmdb.database.dao.MovieDao
+import com.example.tmdb.database.entity.DbMovie
+import com.example.tmdb.network.*
+import com.example.tmdb.utils.toMovieItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -10,15 +14,22 @@ interface MovieRepository {
     fun getNowPlayingMovies(): Flow<List<MovieItem>>
     fun getUpcomingMovies(): Flow<List<MovieItem>>
     fun getMovieSearchResults(query: String): Flow<List<MovieItem>>
-    fun getFavoriteMovies(): Flow<List<MovieItem>>
     fun getMovieDetails(movieId: Int): Flow<MovieDetailsResponse>
     fun getMovieCredits(movieId: Int): Flow<MovieCreditsResponse>
-    suspend fun toggleFavorite(movie: MovieItem)
+
+    //fun getFavoriteMovies(): Flow<List<MovieItem>>
+    //suspend fun toggleFavorite(movie: MovieItem)
+
+    fun getFavoriteMovies(): Flow<List<MovieItem>>
+    suspend fun insertMovie(movie: DbMovie)
+    suspend fun deleteMovie(movieId: Int)
 }
 
 class MovieRepositoryImpl(
     private val movieApi: MovieApi,
-    private val movieDatabase: MovieDatabase
+    private val movieDao: MovieDao
+
+    //private val movieDatabase: MovieDatabase
 ): MovieRepository  {
     override fun getPopularMovies(): Flow<List<MovieItem>> = popularMoviesFlow
 
@@ -36,15 +47,24 @@ class MovieRepositoryImpl(
         emit(movieApi.getMovieCredits(movieId = movieId))
     }
 
-    override fun getMovieSearchResults(query: String): Flow<List<MovieItem>> {
-        TODO("Not yet implemented")
+    //movie db
+    override fun getFavoriteMovies(): Flow<List<MovieItem>> =
+        movieDao.getAllMovies().map { moviesList ->
+            moviesList.map { dbMovie ->
+                dbMovie.toMovieItem()
+            }
+        }
+
+    override suspend fun insertMovie(movie: DbMovie) {
+        movieDao.insertMovie(movie = movie)
     }
 
-    override fun getFavoriteMovies(): Flow<List<MovieItem>> = favoriteMoviesFlow
+    override suspend fun deleteMovie(movieId: Int) {
+        movieDao.deleteMovie(movieId = movieId)
+    }
 
-    override suspend fun toggleFavorite(movie: MovieItem) {
-        movieDatabase.toggleFavorite(movie = movie)
-        refreshFavouriteMoviesPublisher.emit(RefreshEvent)
+    override fun getMovieSearchResults(query: String): Flow<List<MovieItem>> {
+        TODO("Not yet implemented")
     }
 
     private val sharingScope = CoroutineScope(Dispatchers.Default)
@@ -53,18 +73,6 @@ class MovieRepositoryImpl(
     private val topRatedMoviesFlow =  getSharedFlow(MovieCategory.TopRatedMovies)
     private val nowPlayingMoviesFlow =  getSharedFlow(MovieCategory.NowPlayingMovies)
     private val upcomingMoviesFlow =  getSharedFlow(MovieCategory.UpcomingMovies)
-
-    object RefreshEvent
-    private val refreshFavouriteMoviesPublisher = MutableSharedFlow<RefreshEvent>(replay = 1)
-
-    private val favoriteMoviesFlow = refreshFavouriteMoviesPublisher
-        .onStart { refreshFavouriteMoviesPublisher.emit(RefreshEvent) }
-        .map { movieDatabase.getFavoriteMovies() }
-        .shareIn(
-            sharingScope,
-            SharingStarted.Lazily,
-            replay = 1,
-        )
 
     private fun getSharedFlow(movieCategory: MovieCategory): Flow<List<MovieItem>> = flow {
         when(movieCategory) {
@@ -86,3 +94,22 @@ class MovieRepositoryImpl(
         object UpcomingMovies: MovieCategory()
     }
 }
+
+    /*
+    override fun getFavoriteMovies(): Flow<List<MovieItem>> = favoriteMoviesFlow
+
+    override suspend fun toggleFavorite(movie: MovieItem) {
+        movieDatabase.toggleFavorite(movie = movie)
+        refreshFavouriteMoviesPublisher.emit(RefreshEvent)
+    }*/
+    /*object RefreshEvent
+    private val refreshFavouriteMoviesPublisher = MutableSharedFlow<RefreshEvent>(replay = 1)
+
+    private val favoriteMoviesFlow = refreshFavouriteMoviesPublisher
+        .onStart { refreshFavouriteMoviesPublisher.emit(RefreshEvent) }
+        .map { movieDatabase.getFavoriteMovies() }
+        .shareIn(
+            sharingScope,
+            SharingStarted.Lazily,
+            replay = 1,
+        )*/

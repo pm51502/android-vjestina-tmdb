@@ -1,4 +1,4 @@
-package com.example.tmdb.data
+package com.example.tmdb.network
 
 interface MovieDatabase {
     fun getFavoriteMovies(): List<MovieItem>

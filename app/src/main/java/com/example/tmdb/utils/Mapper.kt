@@ -1,5 +1,10 @@
-package com.example.tmdb.data
+package com.example.tmdb.utils
 
+import com.example.tmdb.database.entity.DbMovie
+import com.example.tmdb.network.CastMember
+import com.example.tmdb.network.MovieCreditsResponse
+import com.example.tmdb.network.MovieDetailsResponse
+import com.example.tmdb.network.MovieItem
 import com.example.tmdb.ui.screens.MovieItemDetailViewState
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 
@@ -42,4 +47,18 @@ fun MovieDetailsResponse.toMovieDetailsViewState(
 
 fun CastMember.updateProfilePath() = copy(
     profilePath = profilePath?.let { "$BASE_IMAGE_URL$it" }
+)
+
+fun DbMovie.toMovieItem() = MovieItem(
+    id = movieId,
+    title = title,
+    overview = overview,
+    posterPath = posterPath
+)
+
+fun MovieItemViewState.toDbMovie() = DbMovie(
+    movieId = id,
+    title = title,
+    overview = overview,
+    posterPath = imageUrl
 )
