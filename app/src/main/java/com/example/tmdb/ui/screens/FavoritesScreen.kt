@@ -14,7 +14,6 @@ import com.example.tmdb.ui.navigation.navigateToScreen
 import com.example.tmdb.ui.screens.shared.components.ContentTitle
 import com.example.tmdb.ui.screens.shared.components.MovieCard
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
-import com.example.tmdb.utils.toDbMovie
 import com.example.tmdb.viewmodels.FavoritesViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
@@ -24,7 +23,8 @@ import org.koin.androidx.compose.viewModel
 @Composable
 fun FavoritesScreen(navController: NavController) {
     val favoritesViewModel by viewModel<FavoritesViewModel>()
-    val favoriteMovies = favoritesViewModel.favoriteMoviesStateFlow.collectAsState(emptyList()).value
+    val favoriteMovies =
+        favoritesViewModel.favoriteMoviesStateFlow.collectAsState(emptyList()).value
 
     LazyColumn {
         item {
@@ -57,11 +57,7 @@ fun FavoritesScreen(navController: NavController) {
                         },
                         onFavoriteClick = { movie: MovieItemViewState ->
                             if (!movie.isFavorite)
-                                favoritesViewModel.removeFavoriteMovie(movieId = movie.id)
-                            else
-                                favoritesViewModel.addFavoriteMovie(movie = movie.toDbMovie())
-
-                            //favoritesViewModel.toggleFavorite(movie = movie)
+                                favoritesViewModel.deleteFavoriteMovie(movieId = movie.id)
                         }
                     )
                 }

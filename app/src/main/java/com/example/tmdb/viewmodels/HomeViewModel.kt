@@ -2,11 +2,13 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.database.entity.DbMovie
+import com.example.tmdb.network.MovieCreditsResponse
+import com.example.tmdb.network.MovieDetailsResponse
 import com.example.tmdb.ui.screens.shared.components.MovieItemViewState
 import kotlinx.coroutines.flow.*
 import com.example.tmdb.repository.MovieRepositoryImpl.MovieCategory
 import com.example.tmdb.repository.MovieRepository
+import com.example.tmdb.utils.toMovieItemDetails
 import com.example.tmdb.utils.toMovieItemViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,20 +21,34 @@ class HomeViewModel(
     val nowPlayingMoviesStateFlow = getCombinedFlow(MovieCategory.NowPlayingMovies)
     val upcomingMoviesStateFlow = getCombinedFlow(MovieCategory.UpcomingMovies)
 
-    fun addFavoriteMovie(movie: DbMovie) {
+    private val movieDetailsFlow = MutableStateFlow<MovieDetailsResponse?>(null)
+    private val movieCreditsFlow = MutableStateFlow<MovieCreditsResponse?>(null)
+
+    fun insertFavoriteMovie(movieId: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.insertMovie(movie = movie)
+            movieRepository.getMovieDetails(movieId = movieId).collect { movieDetailsFlow.emit(it) }
+            movieRepository.getMovieCredits(movieId = movieId).collect { movieCreditsFlow.emit(it) }
+
+            movieDetailsFlow.value?.let { movieDetails ->
+                movieCreditsFlow.value?.let { movieCredits ->
+                    movieRepository.insertFavoriteMovie(
+                        movieItemDetails = movieDetails.toMovieItemDetails(
+                            movieCreditsResponse = movieCredits
+                        )
+                    )
+                }
+            }
         }
     }
 
-    fun removeFavoriteMovie(movieId: Int) {
+    fun deleteFavoriteMovie(movieId: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.deleteMovie(movieId = movieId)
+            movieRepository.deleteFavoriteMovie(movieId = movieId)
         }
     }
 
     private fun getCombinedFlow(movieCategory: MovieCategory): StateFlow<List<MovieItemViewState>> {
-        val moviesFlow = when(movieCategory) {
+        val moviesFlow = when (movieCategory) {
             is MovieCategory.PopularMovies -> movieRepository.getPopularMovies()
             is MovieCategory.TopRatedMovies -> movieRepository.getTopRatedMovies()
             is MovieCategory.NowPlayingMovies -> movieRepository.getNowPlayingMovies()
@@ -54,9 +70,3 @@ class HomeViewModel(
         )
     }
 }
-
-/*fun toggleFavorite(movie: MovieItem) {
-        viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.toggleFavorite(movie = movie)
-        }
-    }*/

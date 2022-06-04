@@ -64,6 +64,8 @@ data class MovieDetailsResponse(
 
 @Serializable
 data class Genre(
+    @SerialName("id")
+    val id: Int,
     @SerialName("name")
     val name: String
 )
@@ -78,6 +80,8 @@ data class MovieCreditsResponse(
 
 @Serializable
 data class CastMember(
+    @SerialName("id")
+    val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("character")
@@ -88,6 +92,8 @@ data class CastMember(
 
 @Serializable
 data class CrewMember(
+    @SerialName("id")
+    val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("job")

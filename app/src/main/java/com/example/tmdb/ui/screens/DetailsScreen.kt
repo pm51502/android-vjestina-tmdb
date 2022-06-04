@@ -158,8 +158,8 @@ fun DetailsScreen(
                     )
                 }
             }
-            
-            item { 
+
+            item {
                 CrewRow(crew = movieDetails.crew)
             }
 
@@ -249,7 +249,7 @@ fun CrewRow(
     LazyRow(
         modifier = modifier.padding(start = dimensionResource(id = R.dimen.padding_md))
     ) {
-        for (i in 0 until crew.size-1 step 2) {
+        for (i in 0 until crew.size - 1 step 2) {
             item {
                 Column(
                     modifier = modifier.padding(end = dimensionResource(id = R.dimen.padding_sm))

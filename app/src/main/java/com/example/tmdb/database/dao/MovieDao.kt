@@ -1,24 +1,42 @@
 package com.example.tmdb.database.dao
 
 import androidx.room.*
-import com.example.tmdb.database.entity.DbMovie
+import com.example.tmdb.database.entity.*
 import kotlinx.coroutines.flow.Flow
-
-const val MOVIE_TABLE_NAME = "movie"
-const val MOVIE_ID_COLUMN = "movie_id"
 
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM $MOVIE_TABLE_NAME")
-    fun getAllMovies(): Flow<List<DbMovie>>
+    @Query("SELECT movie_id, title, overview, poster_path FROM movie")
+    fun getAllMovies(): Flow<List<DbMovieItem>>
+
+    @Query("SELECT * FROM movie WHERE movie_id = :movieId")
+    fun getMovieDetails(movieId: Int): Flow<MovieWithDetails>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovie(movie: DbMovie)
 
-    @Query("DELETE FROM $MOVIE_TABLE_NAME WHERE $MOVIE_ID_COLUMN = :movieId")
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertGenre(genre: DbGenre)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCastMember(castMember: DbCastMember)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCrewMember(crewMember: DbCrewMember)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieGenreCrossRef(movieGenreCrossRef: MovieGenreCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieCastCrossRef(movieCastCrossRef: MovieCastCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovieCrewCrossRef(movieCrewCrossRef: MovieCrewCrossRef)
+
+    @Query("DELETE FROM movie WHERE movie_id = :movieId")
     suspend fun deleteMovie(movieId: Int)
 
-    /*@Query("SELECT EXISTS(SELECT * FROM $MOVIE_TABLE_NAME WHERE $MOVIE_ID_COLUMN = :movieId)")
-    fun checkIfMovieExists(movieId: Int): Flow<Boolean>*/
+    @Query("SELECT EXISTS(SELECT * FROM movie WHERE movie_id = :movieId)")
+    fun checkIfMovieExists(movieId: Int): Flow<Boolean>
 }

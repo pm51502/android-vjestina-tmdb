@@ -5,13 +5,13 @@ interface MovieDatabase {
     fun toggleFavorite(movie: MovieItem)
 }
 
-internal class MovieDatabaseImpl: MovieDatabase {
+internal class MovieDatabaseImpl : MovieDatabase {
     private val favoriteMovies = mutableListOf<MovieItem>()
 
     override fun getFavoriteMovies(): List<MovieItem> = favoriteMovies
 
     override fun toggleFavorite(movie: MovieItem) {
-        if(favoriteMovies.contains(movie)) favoriteMovies.remove(movie)
+        if (favoriteMovies.contains(movie)) favoriteMovies.remove(movie)
         else favoriteMovies.add(movie)
     }
 }
