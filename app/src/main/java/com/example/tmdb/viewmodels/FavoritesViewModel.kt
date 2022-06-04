@@ -2,7 +2,6 @@ package com.example.tmdb.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.database.entity.DbMovie
 import com.example.tmdb.repository.MovieRepository
 import com.example.tmdb.utils.toMovieItemViewState
 import kotlinx.coroutines.Dispatchers
@@ -21,21 +20,9 @@ class FavoritesViewModel(
             }
         }
 
-    fun addFavoriteMovie(movie: DbMovie) {
+    fun deleteFavoriteMovie(movieId: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.insertMovie(movie = movie)
-        }
-    }
-
-    fun removeFavoriteMovie(movieId: Int) {
-        viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.deleteMovie(movieId = movieId)
+            movieRepository.deleteFavoriteMovie(movieId = movieId)
         }
     }
 }
-
-    /*fun toggleFavorite(movie: MovieItem) {
-        viewModelScope.launch(Dispatchers.Default) {
-            movieRepository.toggleFavorite(movie = movie)
-        }
-    }*/

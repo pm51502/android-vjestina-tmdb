@@ -25,7 +25,6 @@ fun FavoriteButton(
         modifier = modifier
             .clickable {
                 onFavoriteClick.invoke(item.copy(isFavorite = item.isFavorite.not()))
-                //onFavoriteClick.invoke(item.toMovieItem())
             }
             .size(dimensionResource(id = R.dimen.large_spacing))
             .background(

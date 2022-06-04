@@ -12,7 +12,6 @@ import com.example.tmdb.ui.screens.shared.components.TabLayout
 import com.example.tmdb.ui.screens.shared.components.SearchView
 import com.example.tmdb.utils.ConnectionState
 import com.example.tmdb.utils.connectivityState
-import com.example.tmdb.utils.toDbMovie
 import com.example.tmdb.viewmodels.HomeViewModel
 import org.koin.androidx.compose.viewModel
 
@@ -20,7 +19,6 @@ import org.koin.androidx.compose.viewModel
 fun HomeScreen(navController: NavController) {
     val homeViewModel by viewModel<HomeViewModel>()
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
-    //val isConnected = checkForInternet(context = LocalContext.current)
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
@@ -34,11 +32,9 @@ fun HomeScreen(navController: NavController) {
 
     val onFavoriteClick = { movie: MovieItemViewState ->
         if (!movie.isFavorite)
-            homeViewModel.removeFavoriteMovie(movieId = movie.id)
+            homeViewModel.deleteFavoriteMovie(movieId = movie.id)
         else
-            homeViewModel.addFavoriteMovie(movie = movie.toDbMovie())
-
-        //homeViewModel.toggleFavorite(movie = movie)
+            homeViewModel.insertFavoriteMovie(movieId = movie.id)
     }
 
     val popularMovies = homeViewModel.popularMoviesStateFlow.collectAsState().value
@@ -89,5 +85,4 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
-
 }

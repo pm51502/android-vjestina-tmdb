@@ -25,7 +25,6 @@ val dataModule = module {
         MovieRepositoryImpl(
             movieApi = get(),
             movieDao = get()
-            //movieDatabase = get()
         )
     }
     single<MovieApi> {
@@ -34,10 +33,6 @@ val dataModule = module {
             context = androidContext()
         )
     }
-    //delete later
-    /*single<MovieDatabase> {
-        MovieDatabaseImpl()
-    }*/
     single {
         httpClient
     }
